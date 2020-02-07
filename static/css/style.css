@@ -1,0 +1,270 @@
+@import url(bootstrap.min.css);
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700,900);
+
+a,
+a:focus {
+    text-decoration: none;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Titillium Web', sans-serif;
+}
+
+.authfy-panel,
+.focus-input,
+.panel-login .form-control:focus+.focus-input:before,
+.panel-signup .form-control:focus+.focus-input:before,
+.wrap-input {
+    width: 100%;
+}
+
+body,
+html {
+    background-color: #f0f2f5;
+    background-image: url(../../../media/background/mylibrary.jpg);
+    background-repeat: no-repeat;
+    background-position: 100%;
+    background-size: cover;
+    height: 100vh;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    font-size: 1.6em;
+    font-weight: 400;
+    color: #44525f;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+a:focus {
+    outline: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #e4e6ee;
+}
+
+a,
+a:focus,
+a:hover {
+    color: #4f77ff;
+}
+
+.btn-primary {
+    background-color: #4f77ff;
+    border-color: #4f77ff;
+}
+
+.btn-primary.active,
+.btn-primary:active,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.btn-primary:focus,
+.btn-primary:hover {
+    background-color: #486ff2;
+    border-color: #486ff2;
+}
+
+.authfy-login .btn.btn-lg {
+    border-radius: 3px;
+    box-shadow: 0 2px 3px #9c9c9c;
+}
+
+.authfy-container {
+    margin-top: -moz-calc((100vh - 430px)/2);
+    margin-bottom: -moz-calc((100vh - 430px)/2);
+    margin-top: -webkit-calc((100vh - 430px)/2);
+    margin-bottom: -webkit-calc((100vh - 430px)/2);
+    margin-top: calc((100vh - 430px)/2);
+    margin-bottom: calc((100vh - 430px)/2);
+}
+
+.authfy-panel-center {
+    background-color: rgba(255,255,255,0.5);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    -webkit-box-shadow: 0 2px 6px 0 #1d2030;
+    box-shadow: 0 2px 6px 0 #1d2030;
+}
+
+.authfy-login {
+    height: 360px;
+    padding: 40px 20px;
+}
+
+.panel-login .form-control,
+.panel-signup .form-control {
+    color: #333;
+    font-size: 16px;
+    height: 50px;
+    padding: 12px 0;
+    outline: 0;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.wrap-input {
+    position: relative;
+    border-bottom: 2px solid #d9d9d9;
+}
+
+.focus-input {
+    position: absolute;
+    display: block;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.authfy-login .nav-tabs>li>a:after,
+.focus-input:before {
+    height: 2px;
+    left: 0;
+    content: "";
+}
+
+.focus-input:before {
+    background-color: #4f77ff;
+    width: 0;
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    -webkit-transition: all .4s;
+    -o-transition: all .4s;
+    -moz-transition: all .4s;
+    transition: all .4s;
+}
+
+.pwdMask {
+    position: relative;
+}
+
+.pwdMask .pwd-toggle {
+    color: #ccc;
+    position: absolute;
+    z-index: 2;
+}
+
+.panel-login .pwdMask .pwd-toggle,
+.panel-signup .pwdMask .pwd-toggle {
+    top: 15px;
+    right: 15px;
+}
+
+.pwdMask .pwd-toggle:focus,
+.pwdMask .pwd-toggle:hover {
+    cursor: pointer;
+}
+
+.pwdMask .pwd-toggle.fa-eye,
+.pwdMask .pwd-toggle:focus,
+.pwdMask .pwd-toggle:hover {
+    color: #4f77ff;
+}
+
+.authfy-login .nav-tabs {
+    margin-bottom: 50px;
+    border-bottom: 2px solid #ddd;
+}
+
+.authfy-login .nav-tabs.nav-justified>.active>a,
+.authfy-login .nav-tabs.nav-justified>.active>a:focus,
+.authfy-login .nav-tabs.nav-justified>.active>a:hover,
+.authfy-login .nav-tabs>li.active>a,
+.authfy-login .nav-tabs>li.active>a:focus,
+.authfy-login .nav-tabs>li.active>a:hover {
+    cursor: pointer;
+    border-width: 0;
+}
+
+.authfy-login .nav.nav-tabs>li>a:focus,
+.authfy-login .nav.nav-tabs>li>a:hover {
+    background-color: transparent;
+}
+
+.authfy-login .nav-tabs>li>a {
+    color: #666;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: .25px;
+    margin-bottom: -1px;
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
+}
+
+.authfy-login .nav-tabs>li.active>a,
+.authfy-login .nav-tabs>li>a:hover {
+    color: #4f77ff !important;
+    background: 0 0;
+    border: none;
+}
+
+.authfy-login .nav-tabs>li>a:after {
+    background-color: #4f77ff;
+    position: absolute;
+    width: 100%;
+    bottom: -1px;
+    transition: all 250ms ease 0s;
+    transform: scale(0);
+}
+
+.authfy-login .nav-tabs>li.active>a:after,
+.nav-tabs>li:hover>a:after {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+.authfy-login .tab-nav>li>a:after {
+    background-color: #4f77ff;
+    color: #fff;
+}
+
+.authfy-login .nav-tabs.nav-justified>.active>a,
+.authfy-login .nav-tabs.nav-justified>.active>a:focus,
+.authfy-login .nav-tabs.nav-justified>.active>a:hover {
+    border: 0;
+}
+
+.errormsg {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+@media (max-width:780px) {
+    .authfy-panel {
+        box-shadow: none;
+        border-radius: 0 0 4px 4px;
+    }
+    .authfy-login .nav-tabs {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width:320px) {
+    .authfy-login {
+        height: 480px;
+    }
+}

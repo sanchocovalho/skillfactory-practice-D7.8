@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои книги{% endblock %}
+
+{% block links %}
+
+    <div class="d-flex justify-content-between align-items-center bg-warning"><div class="mx-2 my-2 h5 font-weight-bold">Привет, <span class="text-primary">{{ user }}</span>!</div><a class="btn btn-secondary mx-2 my-2" href="{%url 'p_library:logout'%}">Выход из библиотеки</a></div>
+    <div class="text-secondary text-center font-weight-bold my-3">
+        <a class="text-secondary text-decoration-none" href="{%url 'p_library:library'%}">Библиотека</a> | 
+        <a class="text-secondary text-decoration-none" href="{%url 'p_library:author_list'%}">Авторы</a> | 
+        <a class="text-secondary text-decoration-none" href="{%url 'p_library:publisher_list'%}">Издательства</a> | 
+        <a class="text-secondary text-decoration-none" href="{%url 'p_library:friend_list'%}">Друзья</a>
+    </div>
+
+    <div class="container my-4">
+        <a class="btn btn-success" href="{%url 'p_library:book_create'%}">Добавить книгу в библиотеку</a>
+    </div>
+
+{% endblock %}
+
+{% block title_h2 %}Список книг:{% endblock %}
+
+{% block content %}
+
+        <ul class="container list-group list-group-flush">
+            {% for book in books %}
+            <div class="row mt-3">
+                <div class="col">
+                    <ul class="list-group text-secondary">
+                        <h1 class="h3 font-weight-bold mt-5">{{book.title}}</h1>
+                        <li class="d-flex justify-content-between list-group-item">
+                            <div class="h5 font-italic">{{book.author}}</div>
+                            <div class="h5 font-bold">{{book.year_release}}</div>
+                        </li>
+                        <li class="d-flex list-group-item">
+                            <p class="h5 font-weight-light">{{book.description|truncatechars:200}}</p>
+                        </li>
+                        <div class="col text-right mx-5 my-3">
+                            <a class="btn btn-warning" href="{%url 'p_library:book_update' book.id %}">Изменить</a>
+                        </div>
+                    </ul>
+                </div>
+                {%if book.cover%}
+                <div class="col text-right">
+                    <img src="{{ book.cover.url }}" alt="" width="200">
+                </div>              
+                {% endif %}    
+            </div>  
+            {% endfor %}
+        </ul>
+    <div class="container my-3">
+        <a class="btn btn-success" href="{%url 'p_library:book_create'%}">Добавить книгу в библиотеку</a>
+    </div>
+
+{% endblock %}

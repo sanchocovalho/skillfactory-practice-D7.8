@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if user.is_authenticated %}
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {% else %}
+    <title>Вход в библиотеку</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    {% endif %}
+    <link href="/media/icon/favicon.ico" rel="shortcut icon" type="image/icon" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            {% if user.is_authenticated %}
+            <div class="col-12 my-3">
+                {% block links %}{% endblock %}
+                <h2 class="text-secondary text-center my-3">{% block title_h2 %}{% endblock %}</h2>
+                {% block content %}{% endblock %}
+            </div>
+            {% else %}
+            <div class="authfy-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h1 class="text-center">Моя библиотека</h1>
+                <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 mx-auto authfy-panel-center">
+                    <div class="authfy-login">
+                        <ul class="nav nav-tabs nav-justified" role="tablist">
+                            <li class="nav-item active" role="presentation"><a href="#login" data-toggle="tab">Войти</a></li>
+                            <li class="nav-item" role="presentation"><a href="#signup" data-toggle="tab">Зарегистрироваться</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="login" class="authfy-panel panel-login text-center tab-pane active">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12">
+                                        <form name="loginForm" class="loginForm" method="POST">
+                                            {% csrf_token %}
+                                            <div class="form-group wrap-input">
+                                                <input type="text" class="form-control text-center" name="username" autofocus="" required="" id="id_username" placeholder="Username">
+                                                <span class="focus-input"></span>
+                                            </div>
+                                            <div class="form-group wrap-input">
+                                                <div class="pwdMask">
+                                                    <input type="password" class="form-control text-center" name="password" required="" id="id_password" placeholder="Password">
+                                                    <span class="focus-input"></span>
+                                                    <span class="fa fa-eye-slash pwd-toggle"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button class="btn btn-lg btn-primary btn-block"
+                                                    type="submit" name="btnLogIn">Войти</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="signup" class="authfy-panel panel-signup text-center tab-pane">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12">
+                                        <form name="signupForm" class="signupForm" method="POST">
+                                            {% csrf_token %}
+                                            <div class="form-group wrap-input">
+                                                <input type="text" class="form-control text-center" name="username" autofocus="" required="" id="id_username2" placeholder="Username">
+                                                <span class="focus-input"></span>
+                                            </div>
+                                            <div class="form-group wrap-input">
+                                                <div class="pwdMask">
+                                                    <input type="password" class="form-control text-center" name="password" placeholder="Password">
+                                                    <span class="focus-input"></span>
+                                                    <span class="fa fa-eye-slash pwd-toggle"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button class="btn btn-lg btn-primary btn-block"
+                                                    type="submit" name="btnSignIn">Зарегистрироваться</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="errormsg">{{ errmsg }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if not user.is_authenticated %}
+    <script src="{% static 'js/jquery-2.2.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    {% endif %}
+</body>
+</html>

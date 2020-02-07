@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Список друзей{% endblock %}
+
+{% block links %}
+
+    <div class="d-flex justify-content-between align-items-center bg-warning"><div class="mx-2 my-2 h5 font-weight-bold">Привет, <span class="text-primary">{{ user }}</span>!</div><a class="btn btn-secondary mx-2 my-2" href="{%url 'p_library:logout'%}">Выход из библиотеки</a></div>
+    <div class="text-secondary text-center font-weight-bold my-3">
+        <a class="text-secondary text-decoration-none" href="{%url 'p_library:book_list'%}">Книги</a> | 
+        <a class="text-secondary text-decoration-none" href="{%url 'p_library:library'%}">Библиотека</a> | 
+        <a class="text-secondary text-decoration-none" href="{%url 'p_library:author_list'%}">Авторы</a> | 
+        <a class="text-secondary text-decoration-none" href="{%url 'p_library:publisher_list'%}">Издательства</a>
+    </div>
+
+{% endblock %}
+
+{% block title_h2 %}Список друзей:{% endblock %}
+
+{% block content %}
+
+    <table class="table table-dark table-stripped table-hover">
+        {% for friend in friends %}
+        <tr class="table-bordered">
+            <td style="width:20px;">{{ forloop.counter }}</td>
+            <td>{{ friend.full_name }}</td>
+            <td style="width:20px;text-align:right;"><a class="btn btn-warning" href="{%url 'p_library:friend_update' friend.id %}">Изменить</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="btn btn-success my-3" href="{%url 'p_library:friend_create'%}">Добавить друга</a>
+
+{% endblock %}
