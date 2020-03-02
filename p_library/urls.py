@@ -1,13 +1,14 @@
 from django.urls import path
 from p_library import views
+from allauth.account.views import login
 
 app_name = "p_library"
 
 urlpatterns = [
     path('', views.book_list, name='book_list'),
     # path('login/', views.login, name='login'),
-    path('logout/', views.log_out, name='logout'),
-    # path('', views.BookList.as_view(), name="book_list"),
+    path('login/', login, name='login'),  
+    path('logout/', views.MyLogoutView.as_view(), name='logout'),
     path('create', views.BookCreate.as_view(), name="book_create"),
     path("update<int:pk>", views.BookUpdate.as_view(), name="book_update"),
     path('library/', views.library, name='library'),

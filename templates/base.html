@@ -24,64 +24,73 @@
                 {% block content %}{% endblock %}
             </div>
             {% else %}
-            <div class="authfy-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="authfy-container col-xs-12 col-sm-10 offset-sm-1 col-sm-offset-1 col-md-8 offset-md-2 col-md-offset-2 col-lg-6 offset-lg-3 col-lg-offset-3">
                 <h1 class="text-center">Моя библиотека</h1>
-                <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 mx-auto authfy-panel-center">
-                    <div class="authfy-login">
-                        <ul class="nav nav-tabs nav-justified" role="tablist">
-                            <li class="nav-item active" role="presentation"><a href="#login" data-toggle="tab">Войти</a></li>
-                            <li class="nav-item" role="presentation"><a href="#signup" data-toggle="tab">Зарегистрироваться</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div id="login" class="authfy-panel panel-login text-center tab-pane active">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12">
-                                        <form name="loginForm" class="loginForm" method="POST">
-                                            {% csrf_token %}
-                                            <div class="form-group wrap-input">
-                                                <input type="text" class="form-control text-center" name="username" autofocus="" required="" id="id_username" placeholder="Username">
-                                                <span class="focus-input"></span>
-                                            </div>
-                                            <div class="form-group wrap-input">
-                                                <div class="pwdMask">
-                                                    <input type="password" class="form-control text-center" name="password" required="" id="id_password" placeholder="Password">
+                <div class="row">
+                    <div class="col-sm-5 col-md-5 col-lg-5 authfy-panel-left">
+                        <div class="brand-col">
+                            <div class="github">
+                                 <a href="/accounts/github/login/?process=login" class="btn btn-block btn-github">Войти с помощью GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 col-md-7 col-lg-7 authfy-panel-right">
+                        <div class="authfy-login">
+                            <ul class="nav nav-tabs nav-justified" role="tablist">
+                                <li class="nav-item active" role="presentation"><a href="#login" data-toggle="tab">Войти</a></li>
+                                <li class="nav-item" role="presentation"><a href="#signup" data-toggle="tab">Зарегистрироваться</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="login" class="authfy-panel panel-login text-center tab-pane active">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12">
+                                            <form name="loginForm" class="loginForm" method="POST">
+                                                {% csrf_token %}
+                                                <div class="form-group wrap-input">
+                                                    <input type="text" class="form-control text-center" name="username" autofocus="" required="" id="id_username" placeholder="Username">
                                                     <span class="focus-input"></span>
-                                                    <span class="fa fa-eye-slash pwd-toggle"></span>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <button class="btn btn-lg btn-primary btn-block"
-                                                    type="submit" name="btnLogIn">Войти</button>
-                                            </div>
-                                        </form>
+                                                <div class="form-group wrap-input">
+                                                    <div class="pwdMask">
+                                                        <input type="password" class="form-control text-center" name="password" required="" id="id_password" placeholder="Password">
+                                                        <span class="focus-input"></span>
+                                                        <span class="fa fa-eye-slash pwd-toggle"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button class="btn btn-lg btn-primary btn-block"
+                                                        type="submit" name="btnLogIn">Войти</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="signup" class="authfy-panel panel-signup text-center tab-pane">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12">
-                                        <form name="signupForm" class="signupForm" method="POST">
-                                            {% csrf_token %}
-                                            <div class="form-group wrap-input">
-                                                <input type="text" class="form-control text-center" name="username" autofocus="" required="" id="id_username2" placeholder="Username">
-                                                <span class="focus-input"></span>
-                                            </div>
-                                            <div class="form-group wrap-input">
-                                                <div class="pwdMask">
-                                                    <input type="password" class="form-control text-center" name="password" placeholder="Password">
+                                <div id="signup" class="authfy-panel panel-signup text-center tab-pane">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12">
+                                            <form name="signupForm" class="signupForm" method="POST">
+                                                {% csrf_token %}
+                                                <div class="form-group wrap-input">
+                                                    <input type="text" class="form-control text-center" name="username" autofocus="" required="" id="id_username2" placeholder="Username">
                                                     <span class="focus-input"></span>
-                                                    <span class="fa fa-eye-slash pwd-toggle"></span>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <button class="btn btn-lg btn-primary btn-block"
-                                                    type="submit" name="btnSignIn">Зарегистрироваться</button>
-                                            </div>
-                                        </form>
+                                                <div class="form-group wrap-input">
+                                                    <div class="pwdMask">
+                                                        <input type="password" class="form-control text-center" name="password" placeholder="Password">
+                                                        <span class="focus-input"></span>
+                                                        <span class="fa fa-eye-slash pwd-toggle"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button class="btn btn-lg btn-primary btn-block"
+                                                        type="submit" name="btnSignIn">Зарегистрироваться</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="errormsg">{{ errmsg }}</div>
                             </div>
-                            <div class="errormsg">{{ errmsg }}</div>
                         </div>
                     </div>
                 </div>

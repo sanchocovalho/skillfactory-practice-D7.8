@@ -6,11 +6,14 @@ from p_library.forms import AuthorForm, BookForm, PublisherForm, FriendForm, Use
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.forms import formset_factory  
-from django.http.response import HttpResponseRedirect
+# from django.http.response import HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
-from django.http import HttpResponse
+from allauth.account.views import LogoutView
+
+class MyLogoutView(LogoutView):
+    template_name = 'logout.html'
 
 class AuthorUpdate(UpdateView):
     model = Author
@@ -76,7 +79,7 @@ class FriendCreate(CreateView):
 #     model = Friend
 #     template_name = 'friend_list.html'
 
-def log_in(request, template_html, url_redirect):     
+def log_in(request, template_html):     
     context = {}
     if request.method == 'POST':
         template = loader.get_template(template_html)
@@ -87,7 +90,7 @@ def log_in(request, template_html, url_redirect):
                 new_user.set_password(user_form.cleaned_data['password'])
                 new_user.save()
                 login(request, authenticate(username=user_form.cleaned_data['username'], password=user_form.cleaned_data['password']))
-                return redirect(url_redirect)
+                return render(request, template_html)
             else:
                 msg_data = {"errmsg": "Введите логин и пароль ещё раз!"}
                 return HttpResponse(template.render(msg_data, request))     
@@ -98,17 +101,14 @@ def log_in(request, template_html, url_redirect):
             else:
                 msg_data = {"errmsg": "Неверный логин или пароль!"}
                 return HttpResponse(template.render(msg_data, request))
-        return redirect(url_redirect)
+        return render(request, template_html)
     else:
         context['form'] = AuthenticationForm()
-
-    if request.user.is_authenticated:
-        context['username'] = request.user.username
     return render(request, template_html, context)
 
-def log_out(request):  
-    auth.logout(request)  
-    return redirect('/')
+# def log_out(request):  
+#     auth.logout(request)
+#     return redirect('/')
 
 def book_list(request):
     if request.user.is_authenticated:
@@ -116,7 +116,7 @@ def book_list(request):
         books = Book.objects.all()
         biblio_data = {"books": books,}
         return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'book_list.html', '/')
+    return log_in(request, 'book_list.html')
 
 def author_list(request):
     if request.user.is_authenticated:
@@ -124,7 +124,7 @@ def author_list(request):
         authors = Author.objects.all()
         biblio_data = {"authors": authors,}
         return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'author_list.html', '/authors/')
+    return log_in(request, 'author_list.html')
 
 # def author_create(request):  
 #     AuthorFormSet = formset_factory(AuthorForm, extra=1)
@@ -144,7 +144,7 @@ def publisher_list(request):
         publishers = Publisher.objects.all()
         biblio_data = {"publishers": publishers,}
         return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'publisher_list.html', '/publishers/')
+    return log_in(request, 'publisher_list.html')
 
 def friend_list(request):
     if request.user.is_authenticated:
@@ -152,7 +152,7 @@ def friend_list(request):
         friends = Friend.objects.all()
         biblio_data = {"friends": friends,}
         return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'friend_list.html', '/friends/')
+    return log_in(request, 'friend_list.html')
 
 def library(request):
     if request.user.is_authenticated:
@@ -165,7 +165,7 @@ def library(request):
             "friends": friends,
         }
         return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'library.html', '/library/')
+    return log_in(request, 'library.html')
 
 def book_increment(request):
     if request.method == 'POST':

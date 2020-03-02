@@ -1,4 +1,5 @@
 Django
+django-allauth
 psycopg2
 sqlparse
 asgiref

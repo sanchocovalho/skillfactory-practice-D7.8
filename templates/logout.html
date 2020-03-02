@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <title>Выход из библиотеки</title>
+    <link href="/media/icon/favicon.ico" rel="shortcut icon" type="image/icon" />
+</head>
+<body>
+    <div class="container-fluid text-center">
+	<h1 class="text-secondary my-3">Выход из библиотеки</h1>
+	<p class="h4 text-secondary my-3">Вы уверены, что хотите выйти из библиотеки?</p>
+	<form method="post" action="{% url 'account_logout' %}">
+	  {% csrf_token %}
+	  {% if redirect_field_value %}
+	  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+	  {% endif %}
+	  <input class="btn btn-success my-3" type="submit" value="Выйти">
+	  <a class="btn btn-danger my-3" href="{%url 'p_library:book_list'%}">Отмена</a>
+	</form>
+</body>
+</html>
