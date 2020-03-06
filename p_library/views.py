@@ -11,6 +11,7 @@ from django.contrib import auth
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from allauth.account.views import LogoutView
+from allauth.socialaccount.models import SocialAccount
 
 class MyLogoutView(LogoutView):
     template_name = 'logout.html'
@@ -27,10 +28,6 @@ class AuthorCreate(CreateView):
     success_url = reverse_lazy('p_library:author_list')
     template_name = 'author_edit.html'
 
-# class AuthorList(ListView):
-#     model = Author
-#     template_name = 'author_list.html'
-
 class BookUpdate(UpdateView):
     model = Book
     form_class = BookForm
@@ -42,10 +39,6 @@ class BookCreate(CreateView):
     form_class = BookForm
     success_url = reverse_lazy('p_library:book_list')
     template_name = 'book_edit.html'
-
-# class BookList(ListView):
-#     model = Book
-#     template_name = 'book_list.html'
 
 class PublisherUpdate(UpdateView):
     model = Publisher
@@ -59,10 +52,6 @@ class PublisherCreate(CreateView):
     success_url = reverse_lazy('p_library:publisher_list')
     template_name = 'publisher_edit.html'
 
-# class PublisherList(ListView):
-#     model = Publisher
-#     template_name = 'publisher_list.html'
-
 class FriendUpdate(UpdateView):
     model = Friend
     form_class = FriendForm
@@ -74,10 +63,6 @@ class FriendCreate(CreateView):
     form_class = FriendForm
     success_url = reverse_lazy('p_library:friend_list')
     template_name = 'friend_edit.html'
-
-# class FriendList(ListView):
-#     model = Friend
-#     template_name = 'friend_list.html'
 
 def log_in(request, template_html):     
     context = {}
@@ -104,17 +89,24 @@ def log_in(request, template_html):
         return render(request, template_html)
     else:
         context['form'] = AuthenticationForm()
+
     return render(request, template_html, context)
 
-# def log_out(request):  
-#     auth.logout(request)
-#     return redirect('/')
+def get_extra_data(request):
+    github_url = None
+    if SocialAccount.objects.filter(provider='github', user=request.user).exists():
+        github_url = SocialAccount.objects.get(provider='github', user=request.user).extra_data['html_url']
+    return github_url
 
 def book_list(request):
     if request.user.is_authenticated:
         template = loader.get_template('book_list.html')
         books = Book.objects.all()
-        biblio_data = {"books": books,}
+        github_url = get_extra_data(request)
+        biblio_data = {
+            "books": books,
+            "github_url": github_url,
+        }
         return HttpResponse(template.render(biblio_data, request))
     return log_in(request, 'book_list.html')
 
@@ -122,27 +114,23 @@ def author_list(request):
     if request.user.is_authenticated:
         template = loader.get_template('author_list.html')
         authors = Author.objects.all()
-        biblio_data = {"authors": authors,}
+        github_url = get_extra_data(request)
+        biblio_data = {
+            "authors": authors,
+            "github_url": github_url,
+        }
         return HttpResponse(template.render(biblio_data, request))
     return log_in(request, 'author_list.html')
-
-# def author_create(request):  
-#     AuthorFormSet = formset_factory(AuthorForm, extra=1)
-#     if request.method == 'POST':
-#         author_formset = AuthorFormSet(request.POST, request.FILES, prefix='authors')
-#         if author_formset.is_valid():
-#             for author_form in author_formset:  
-#                 author_form.save()
-#             return HttpResponseRedirect(reverse_lazy('p_library:author_list'))
-#     else:
-#         author_formset = AuthorFormSet(prefix='authors')
-#     return render(request, 'author_edit.html', {'author_formset': author_formset})
 
 def publisher_list(request):
     if request.user.is_authenticated:
         template = loader.get_template('publisher_list.html')
         publishers = Publisher.objects.all()
-        biblio_data = {"publishers": publishers,}
+        github_url = get_extra_data(request)
+        biblio_data = {
+            "publishers": publishers,
+            "github_url": github_url,
+        }
         return HttpResponse(template.render(biblio_data, request))
     return log_in(request, 'publisher_list.html')
 
@@ -150,7 +138,11 @@ def friend_list(request):
     if request.user.is_authenticated:
         template = loader.get_template('friend_list.html')
         friends = Friend.objects.all()
-        biblio_data = {"friends": friends,}
+        github_url = get_extra_data(request)
+        biblio_data = {
+            "friends": friends,
+            "github_url": github_url,
+        }
         return HttpResponse(template.render(biblio_data, request))
     return log_in(request, 'friend_list.html')
 
@@ -159,10 +151,12 @@ def library(request):
         template = loader.get_template('library.html')
         books = Book.objects.all()
         friends = Friend.objects.all()
+        github_url = get_extra_data(request)
         biblio_data = {
             "title": "мою библиотеку",
             "books": books,
             "friends": friends,
+            "github_url": github_url,  
         }
         return HttpResponse(template.render(biblio_data, request))
     return log_in(request, 'library.html')
@@ -243,4 +237,3 @@ def returned_book(request):
         return redirect('/library/')
     else:
         return redirect('/library/')
-
