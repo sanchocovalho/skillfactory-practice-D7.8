@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Форма редактирования пользователя{% endblock %}
+
+{% block title_h2 %}Форма редактирования пользователя:{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        <input class="btn btn-success my-3" type="submit" value="Сохранить">
+        <a class="btn btn-danger my-3" href="{%url 'p_library:book_list'%}">Отмена</a>
+    </form>
+{% endblock %}

@@ -7,10 +7,25 @@ class UserProfile(models.Model):
         on_delete=models.CASCADE,
         related_name='profile'
         )
+    country = models.CharField(
+        verbose_name=u'Страна',
+        max_length=50,
+        blank=True
+        )
+    location = models.CharField(
+        verbose_name=u'Город',
+        max_length=30,
+        blank=True
+        )
+    birth_date = models.DateField(
+        verbose_name=u'Дата рождения',
+        null=True,
+        blank=True
+        )
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'Данные пользователя'
+        verbose_name_plural = 'Данные пользователей'
 
     def __str__(self):
         return self.user.username

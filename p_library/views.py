@@ -1,20 +1,44 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
-from p_library.models import Author, Book, Publisher, Friend
-from p_library.forms import AuthorForm, BookForm, PublisherForm, FriendForm, UserRegistrationForm
+from p_library.models import Author, Book, Publisher, Friend, UserProfile
+from p_library.forms import AuthorForm, BookForm, PublisherForm, FriendForm, \
+                            UserRegistrationForm, UserForm, UserProfileForm
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
-from django.forms import formset_factory  
-# from django.http.response import HttpResponseRedirect
+from django.forms import formset_factory
 from django.contrib import auth
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from allauth.account.views import LogoutView
 from allauth.socialaccount.models import SocialAccount
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 class MyLogoutView(LogoutView):
     template_name = 'logout.html'
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, instance=request.user.profile)
+        print(profile_form)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('/')
+    else:
+        user_form = UserForm(instance=request.user)
+        try:
+            profile_form = UserProfileForm(instance=request.user.profile)
+        except:
+            profile_form = UserProfileForm(instance=UserProfile.objects.create(user=request.user))
+        print(profile_form)
+    return render(request, 'user_edit.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
 
 class AuthorUpdate(UpdateView):
     model = Author
@@ -64,10 +88,8 @@ class FriendCreate(CreateView):
     success_url = reverse_lazy('p_library:friend_list')
     template_name = 'friend_edit.html'
 
-def log_in(request, template_html):     
-    context = {}
+def log_in(request, template, context):     
     if request.method == 'POST':
-        template = loader.get_template(template_html)
         if 'btnSignIn' in request.POST:
             user_form = UserRegistrationForm(request.POST)
             if user_form.is_valid():
@@ -75,91 +97,87 @@ def log_in(request, template_html):
                 new_user.set_password(user_form.cleaned_data['password'])
                 new_user.save()
                 login(request, authenticate(username=user_form.cleaned_data['username'], password=user_form.cleaned_data['password']))
-                return render(request, template_html)
             else:
-                msg_data = {"errmsg": "Введите логин и пароль ещё раз!"}
-                return HttpResponse(template.render(msg_data, request))     
+                context['errmsg'] = "Введите логин и пароль ещё раз!"     
         else:
             form = AuthenticationForm(request=request, data=request.POST)
             if form.is_valid():
                 auth.login(request, form.get_user())
             else:
-                msg_data = {"errmsg": "Неверный логин или пароль!"}
-                return HttpResponse(template.render(msg_data, request))
-        return render(request, template_html)
+                context['errmsg'] = "Неверный логин или пароль!"
     else:
         context['form'] = AuthenticationForm()
-
-    return render(request, template_html, context)
+    return HttpResponse(template.render(context, request))
 
 def get_extra_data(request):
-    github_url = None
-    if SocialAccount.objects.filter(provider='github', user=request.user).exists():
+    try:
         github_url = SocialAccount.objects.get(provider='github', user=request.user).extra_data['html_url']
+    except:
+        github_url = None
     return github_url
 
 def book_list(request):
+    template = loader.get_template('book_list.html')
+    books = Book.objects.all()
+    github_url = get_extra_data(request)
+    context = {
+        "books": books,
+        "github_url": github_url,
+    }
     if request.user.is_authenticated:
-        template = loader.get_template('book_list.html')
-        books = Book.objects.all()
-        github_url = get_extra_data(request)
-        biblio_data = {
-            "books": books,
-            "github_url": github_url,
-        }
-        return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'book_list.html')
+        return HttpResponse(template.render(context, request))
+    return log_in(request, template, context)
 
 def author_list(request):
+    template = loader.get_template('author_list.html')
+    authors = Author.objects.all()
+    github_url = get_extra_data(request)
+    context = {
+        "authors": authors,
+        "github_url": github_url,
+    }
     if request.user.is_authenticated:
-        template = loader.get_template('author_list.html')
-        authors = Author.objects.all()
-        github_url = get_extra_data(request)
-        biblio_data = {
-            "authors": authors,
-            "github_url": github_url,
-        }
-        return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'author_list.html')
+        return HttpResponse(template.render(context, request))
+    return log_in(request, template, context)
 
 def publisher_list(request):
+    template = loader.get_template('publisher_list.html')
+    publishers = Publisher.objects.all()
+    github_url = get_extra_data(request)
+    context = {
+        "publishers": publishers,
+        "github_url": github_url,
+    }
     if request.user.is_authenticated:
-        template = loader.get_template('publisher_list.html')
-        publishers = Publisher.objects.all()
-        github_url = get_extra_data(request)
-        biblio_data = {
-            "publishers": publishers,
-            "github_url": github_url,
-        }
-        return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'publisher_list.html')
+        return HttpResponse(template.render(context, request))
+    return log_in(request, template, context)
 
 def friend_list(request):
+    template = loader.get_template('friend_list.html')
+    friends = Friend.objects.all()
+    github_url = get_extra_data(request)
+    context = {
+        "friends": friends,
+        "github_url": github_url,
+    }
     if request.user.is_authenticated:
-        template = loader.get_template('friend_list.html')
-        friends = Friend.objects.all()
-        github_url = get_extra_data(request)
-        biblio_data = {
-            "friends": friends,
-            "github_url": github_url,
-        }
-        return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'friend_list.html')
+        return HttpResponse(template.render(context, request))
+    return log_in(request, template, context)
 
 def library(request):
+    template = loader.get_template('library.html')
+    books = Book.objects.all()
+    friends = Friend.objects.all()
+    github_url = get_extra_data(request)
+    context = {
+        "title": "мою библиотеку",
+        "books": books,
+        "friends": friends,
+        "github_url": github_url,  
+    }
     if request.user.is_authenticated:
-        template = loader.get_template('library.html')
-        books = Book.objects.all()
-        friends = Friend.objects.all()
-        github_url = get_extra_data(request)
-        biblio_data = {
-            "title": "мою библиотеку",
-            "books": books,
-            "friends": friends,
-            "github_url": github_url,  
-        }
-        return HttpResponse(template.render(biblio_data, request))
-    return log_in(request, 'library.html')
+        return HttpResponse(template.render(context, request))
+    return log_in(request, template, context)
 
 def book_increment(request):
     if request.method == 'POST':

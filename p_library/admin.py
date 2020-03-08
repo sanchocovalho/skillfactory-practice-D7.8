@@ -1,6 +1,11 @@
 from django.contrib import admin
-from p_library.models import Book, Author, Publisher, Friend  
+from p_library.models import Book, Author, Publisher, Friend, UserProfile
     
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    pass
+
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     @staticmethod

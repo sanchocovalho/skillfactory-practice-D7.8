@@ -1,12 +1,115 @@
 from django import forms  
-from p_library.models import Author, Book, Publisher, Friend
+from p_library.models import Author, Book, Publisher, Friend, UserProfile
 from django.forms.widgets import ClearableFileInput
 from django.contrib.auth.models import User
-  
+
+class UserForm(forms.ModelForm):
+
+    username = forms.CharField(
+        label='Логин',
+        required=True,
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text',
+                'class': 'form-control',
+                'placeholder': 'Введите новый логин'
+            }
+        )
+    )
+
+    first_name = forms.CharField(
+        label='Имя',
+        required=False,
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text',
+                'class': 'form-control',
+                'placeholder': 'Введите имя'
+            }
+        )
+    )
+
+    last_name = forms.CharField(
+        label='Фамилия',
+        required=False,
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text',
+                'class': 'form-control',
+                'placeholder': 'Введите фамилию'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        label='Электронная почта',
+        required=False,
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите электронную почту'
+            }
+        )
+    )
+
+    class Meta:
+        model = User
+        fields = ('username','first_name', 'last_name', 'email')
+
+class UserProfileForm(forms.ModelForm):
+    country = forms.CharField(
+        label='Страна',
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text',
+                'class': 'form-control',
+                'placeholder': 'Введите страну'
+            }
+        )
+    )
+
+    location = forms.CharField(
+        label='Город',
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text',
+                'class': 'form-control',
+                'placeholder': 'Введите город'
+            }
+        )
+    )
+
+    birth_date = forms.DateField(
+        label='Дата рождения',
+        required=False,
+        input_formats=['%d.%m.%Y', '%d-%m-%Y', '%d/%m/%Y'],
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите дату рождения в формате ДД.ММ.ГГГГ'
+            }
+        )
+    )
+
+    class Meta:
+        model = UserProfile
+        fields = ('country', 'location', 'birth_date')
+
 class UserRegistrationForm(forms.ModelForm):
+
     password = forms.CharField(
         label='Password',
-        widget=forms.PasswordInput)
+        widget=forms.PasswordInput
+        )
+
     class Meta:
         model = User
         fields = ('username',)
